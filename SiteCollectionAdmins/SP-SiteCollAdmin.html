@@ -1,0 +1,20 @@
+<!-- This assumes you're relatively familiar with how to use the PNP library provided by Microsoft... -->
+<!-- within a SharePoint On-Premise environment. Also, I use the plain JavaScript version of Fabric because... -->
+<!-- in addition to being a hacky developer, I'm not a designer.  Fabric makes it easy. -->
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="pnp.js"></script>
+<script type="text/javascript" src="fabric.js"></script>
+<link rel="stylesheet" type="text/css" href="fabric.css">
+<link rel="stylesheet" type="text/css" href="fabcomps.css">
+<script type="text/javascript">
+$(function(){
+	//Just some variables to start things off.  Normally, I'd do this in a separate js file, but for brevity's sake, it's here.
+	
+	var filterURL = window.parent._spPageContextInfo.siteAbsoluteUrl, //window.parent because Visual SP launches in a dialog
+		inventoryName = 'Site Collection Inventory',
+		inventoryLocation = '/where/your/inventory/is',
+		api = new $pnp.Web(inventoryLocation)
+		
+	
+});
