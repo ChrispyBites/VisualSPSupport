@@ -1,6 +1,10 @@
-<!-- This assumes you're relatively familiar with how to use the PNP library provided by Microsoft... -->
-<!-- within a SharePoint On-Premise environment. Also, I use the plain JavaScript version of Fabric because... -->
-<!-- in addition to being a hacky developer, I'm not a designer.  Fabric makes it easy. -->
+<!-- 
+
+This assumes you're relatively familiar with how to use the PNP library provided by Microsoft within a SharePoint On-Premise environment. 
+Also, I use the plain JavaScript version of Fabric because in addition to being a hacky developer, I'm not a designer.  
+Fabric makes it easy. Also, I have no idea how to do React, the primary version of Fabric.  
+
+-->
 
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="pnp.js"></script>
@@ -14,7 +18,87 @@ $(function(){
 	var filterURL = window.parent._spPageContextInfo.siteAbsoluteUrl, //window.parent because Visual SP launches in a dialog
 		inventoryName = 'Site Collection Inventory',
 		inventoryLocation = '/where/your/inventory/is',
-		api = new $pnp.Web(inventoryLocation)
+		api = new $pnp.Web(inventoryLocation);
+	
+	getSiteCollectionAdmins(api,inventoryName,filterURL).then(function(data){
+		var promises = data[0].Administrators.results.map(function(user){
+			var userName = user.Name.split('|')[1];
+			//In our environment, we have an active directory presence for our SharePoint support box for... reasons.
+			//Here, I'm checking to see if one of the users I get back in my return is that presence and skipping it if it is.
+			if(userName.indexOf('sptest') == -1){
+				return getTeamMemberDetails(userName);
+			}
+		});
 		
+		Promise.all(promises).then(buildAdminDisplay,error);
+	});
 	
 });
+
+function buildAdminDisplay(data){
+	var html = '';
+
+	admins = data.map(function(o){
+		return new Administrator(o);
+	});
+	
+	admins.map(function(o){
+		if(o.invalid){
+			$('div.missingUser').show();
+		} else {
+			html += '<div class="row ms-font-l ms-fontColor-neutralPrimary">';
+			html += '<div class="col">'+o.name+'</div>';
+			html += '<div class="col"><a href="mailto:'+o.email+'">'+o.email+'</a></div>';
+			html += '<div class="col">'+o.phone+'</div>';
+			html += '</div>';
+		}
+	});
+	
+	$('#scas').after(html);
+}
+	
+	
+function getSiteCollectionAdmins(api,inventoryName,filterURL){
+	return api.lists.getByTitle(inventoryName).items
+		.select('Administrators/Name','Administrators/Title')
+		.expand('Administrators')
+		.filter("SiteURL eq '" + filterURL + "'")
+		.get().then(function(data){
+		return data;
+	});
+}
+	
+function getTeamMemberDetails(userName){
+	return $pnp.sp.profiles.getPropertiesFor(userName).then(function(properties){
+		return properties;
+	});
+}
+	
+function Administrator(obj){
+	//YMMV here.  This is how our user profile service is set up.
+	this.name = (obj.Name) ? obj.Name : null;
+	this.email = (obj.Email) ? obj.Email : null;
+	this.phone = (obj.Props) ? obj.Props.WorkPhone : null;
+	this.invalid = (obj.invalid) ? obj.invald : false;
+}
+</script>
+
+<div class="container">
+	<div class="ms-font-m-plus ms-fontColor-neutralPrimary">
+		In my solution, I have a little note saying, "Before you reach out to us, contact these people."  You do you.
+	</div>
+	
+	<div class="row ms-font-xl ms-fontColor-themePrimary" id="scas">
+		<div class="col">Name</div>
+		<div class="col">Email</div>
+		<div class="col">Work Phone</div>
+	</div>
+	
+	<!-- If a team member has left the company but no one's updated the SCA list for the site collection, we have this -->
+	<div class="missingUser ms-font-l ms-fontColor-redDark">
+		<p>One or more of your configured site collection administrators is invalid.</p>
+        <p>Please contact <a href="mailto:yoursupport@email.com">support@email.com</a> and provide your site's URL.</p>
+	</div>
+</div>
+
+<script src="https://cdn.polyfill.io/v2/polyfill.min.js?callback=doAsync&features=es6|always|gated,fetch|always|gated"></script>
