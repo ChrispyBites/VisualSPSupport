@@ -1,0 +1,21 @@
+#container{
+    width:800px;
+    height:400px;
+}
+
+.row{
+    display:flex;
+    flex-direction:row;
+}
+
+.col{
+    flex:1;
+}
+
+#container > div,.field-block {
+    margin:5px 0 10px;
+}
+
+.hidden,.ms-formtable,#s4-ribbonrow{
+    display:none;
+}
