@@ -10,9 +10,9 @@ function initForm(page){
         setSiteUrlField();
 
         //Lights up the buttons.
-        var b = document.querySelectorAll('.ms-Button');
-        for (var i = 0; i < b.length; i++) {
-            new fabric['Button'](b[i], actionHandler);
+        var buttons = document.querySelectorAll('.ms-Button');
+        for (var i = 0; i < buttons.length; i++) {
+            new fabric['Button'](buttons[i], actionHandler);
         }
 
         doFormButtons();
