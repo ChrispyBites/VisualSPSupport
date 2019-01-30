@@ -37,11 +37,19 @@ $(function(){
 
 function buildAdminDisplay(data){
 	var html = '';
-
-	admins = data.map(function(o){
+	//If you do like we do and have a service account in the SCA list for all your site collections, data will have one undefined 
+	//element in the array, which we'll need to axe, like so:
+	
+	var admins = data.filter(function(o){
+		return o != undefined;
+	});
+	
+	//Now I use a generator function to clean things up a tad.
+	admins = admins.map(function(o){
 		return new Administrator(o);
 	});
 	
+	//Now we do HTML things.
 	admins.map(function(o){
 		if(o.invalid){
 			$('div.missingUser').show();
@@ -53,7 +61,6 @@ function buildAdminDisplay(data){
 			html += '</div>';
 		}
 	});
-	
 	$('#scas').after(html);
 }
 	
