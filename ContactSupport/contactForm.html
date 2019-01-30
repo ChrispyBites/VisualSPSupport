@@ -1,0 +1,129 @@
+<!-- 
+  As a reminder from the roundtable, this works thanks to javascript injection, a technique that will not work in the cloud.
+  A reference to this file needs to be added to a content editor webpart on the list you decide to use.
+-->
+
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="fabric.js"></script>
+<script type="text/javascript" src="underscore.js"></script>
+<script type="text/javascript" src="pnp.js"></script>
+<script type="text/javascript" src="forminator.js"></script>
+<script type="text/javascript" src="handlebars.js"></script>
+<script type="text/javascript" src="date.js"></script>
+<script type="text/javascript" src="spContactForm.js"></script>
+<link rel="stylesheet" type="text/css" href="fabric.css">
+<link rel="stylesheet" type="text/css" href="fabcomps.css">
+<link rel="stylesheet" type="text/css" href="spContactForm.css">
+<script type="text/javascript">
+$(function(){
+    var page = _spPageContextInfo.serverRequestPath;
+    initForm(page);
+});
+</script>
+<div id="container">
+    <div class="ms-font-xxl ms-fontColor-themeDarker">How can we help?</div>
+
+    <!-- Category -->
+    <div class="field-block">
+        <div class="label">Please select from one of the following categories:</div>
+        <div class="formValue" data-displayName="Category"></div>
+    </div>
+
+    <!-- All stage one text. -->
+    <div id="stageOne" class="ms-font-m-plus">
+
+        <div id="access" class="hidden stageBlock">
+            <p>SharePoint Business Support does not grant access to SharePoint sites.  Please contact your site's administrator(s) for assistance.  If you do not know the site administrator(s), a list is available on the <strong>Help tab</strong>; look for the <strong>Your Site Collection Administrator(s)</strong> button.</p>
+            <p>If you are a site administrator, please review our policy on <a href="https://sharepoint.tsys.com/help/Lists/Posts/Post.aspx?ID=147">Team Site Permissions</a>.</p>
+        </div>
+
+        <div id="ispan" class="hidden stageBlock">
+            <p>SharePoint Business Support cannot troubleshoot ISPAN issues.</p>
+            <p>Please contact the Team Member Support at 706-644-1234 or <a href="mailto:teammembersupport@tsys.com">teammembersupport@tsys.com</a>.</p>
+        </div>
+
+        <div id="document" class="hidden stageBlock">
+            <p>Your site administrator can resolve most check in/out issues.  If you do not know your site's administrator(s), a list is available on the <strong>Help tab</strong>; look for the <strong>Your Site Collection Administrator(s)</strong> button.</p> 
+            <p>If the issue persists, click the <strong>No</strong> button, below, and provide the URL and document filename.</p>
+        </div>
+
+        <div id="storage" class="hidden stageBlock">
+            <p>If you have received an error indicating the maximum site allocation has been exceeded, please contact your site collection administrator(s) immediately.</p> 
+            <p>You can find your site collection administrator(s) in the <strong>Help tab > Your Site Collection Administrator(s)</strong>.  It is their responsibility to submit a request for additional allocation.  If you are a site collection administrator, <a href="https://sharepoint.tsys.com/sites/gts_ecs/spbs/Lists/SiteRequests/NewForm.aspx?isdlg=1&Source=https%3a//sharepoint.tsys.com/Pages/SiteRequestConfirmation.aspx&ContentTypeId=0x01009B210D987180AA42A5F27315E179B5A101009FD8FBA0657D894C8A2B3AA6781D91F3" class="callout">click here</a> to submit a request for additional storage.</p>  
+            <p>For other document upload issues, click the No button below and use the form to describe the issue in detail, including the location and filename of the document in question.  If possible, please include a screen shot or the exact text of the error you're experiencing.</p>
+        </div>
+
+        <div id="question" class="hidden stageBlock">
+            <p>We get it.  SharePoint is big and complicated and, even to us, sometimes overwhelming.  Luckily, we've got a lot of great resources to help you out!</p>
+            <ul>
+                <li>Take some time to explore the Help tab.  Each button on the Help tab ribbon launches an article or short video describing how to do something in SharePoint.  It's contextual, so take a look at the Help tab everywhere on your site!</li>
+                <li>If you don't know what you need, and just need some help getting started, try visiting the <a href="https://sharepoint.tsys.com/" target="_blank">SharePoint Help Site</a>.  You'll find a ton of great content there.</li>
+                <li>We have a wonderful community of helpful users on Yammer.  Swing by the SharePoint Users Yammer Group and ask your question.</li>
+                <li>If you think you need consultation or more personal assistance, feel free to <a class="projectRequest" href="https://sharepoint.tsys.com/sites/gts_ecs/spbs/Lists/ProjectRequests/NewForm.aspx?Source=https%3a//sharepoint.tsys.com/sites/gts_ecs/SitePages/ThankYou.aspx?isdlg=1">Submit a Project Request</a> and we'll schedule some time to work with you directly.</li>
+            </ul>
+        </div>
+
+        <div id="customization" class="hidden stageBlock">
+            <p>The SharePoint Business Support team can offer a number of customization services to help you get the most out of your team's SharePoint site.</p>  
+            <p>Whether you're looking for workflows to automate your business processes, customized list forms, or you'd like a modern site design, feel free to <a class="projectRequest" href="https://sharepoint.tsys.com/sites/gts_ecs/spbs/Lists/ProjectRequests/NewForm.aspx?Source=https%3a//sharepoint.tsys.com/sites/gts_ecs/SitePages/ThankYou.aspx?isdlg=1">Submit a Project Request</a> and we'll schedule some time to talk through your requirements.</p>
+        </div>
+
+        <div id="newSite" class="hidden stageBlock">
+            <p>If you need a new site or site collection, please submit a <a class="callout" href="https://sharepoint.tsys.com/sites/gts_ecs/spbs/Lists/SiteRequests/NewForm.aspx?isdlg=1&Source=https%3a//sharepoint.tsys.com/Pages/SiteRequestConfirmation.aspx">New Site Request</a>.</p>
+        </div>
+
+        <div id="check" class="hidden stageBlock">
+            <div class="text ms-font-xl ms-fontColor-themeDarker">Did this help resolve the issue?</div>
+            <div class="row">
+                <div class="col">
+                    <button type="button" id="yes" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">Yes! :)</span>
+                    </button>
+                </div>
+                <div class="col">
+                    <button type="button" id="no" class="ms-Button ms-Button--primary">
+                        <span class="ms-Button-label">No. :(</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="stageTwo">
+
+        <div id="information" class="hidden">
+
+            <div class="text ms-font-xl ms-fontColor-themeDarker">
+                <span id="fail" class="hidden">Uh oh.</span> Let's get a little more info.
+            </div>
+
+            <div class="field-block">
+                <div id="title" class="ms-font-m-plus"></div>
+                <div class="formValue" data-displayName="Title"></div>
+            </div>
+
+            <div class="field-block">
+                <div id="descriptionText" class="ms-font-m-plus"></div>
+                <div class="formValue" data-displayName="Description"></div>
+                <div id="descriptionBumper" class="ms-font-m"></div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div id="stageThree" class="hidden">
+
+        <div id="complete" class="ms-font-m-plus">
+            <p>Awesome! Let us know what you thought of this interaction by filling out <a href="https://sharepoint.tsys.com/sites/gts_ecs/Lists/ECSSupportSurvey/NewForm.aspx?Source=https://sharepoint.tsys.com/sites/gts_ecs/SitePages/Thank%20You.aspx">this survey</a>.</p>
+            <p>Please go ahead and <strong>Close</strong> the form.</p>
+        </div>
+
+        <div id="formButtons">
+            <span class="formSave"></span>
+            <span class="formCancel"></span>
+        </div>
+
+    </div>
+    
+</div>
